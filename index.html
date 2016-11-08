@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/sandstone/bootstrap.min.css">
+<link rel="stylesheet" href="css/styles.css">
+
+<script src="js/vendors/angular.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/modules/controllers.js"></script>
+<script src="js/modules/filter.js"></script>
+
+<body data-ng-app = 'test'>
+<div class="container">
+	<div class="row">
+		<div class="boxWrapper" data-ng-controller = 'filterCtrl as filterCtrl' >
+			<div class="leftFilterBar col-md-3">
+				<button class='button clearFilter' data-ng-click = 'usedFilter = {}' data-ng-show = 'showClearButton()'>Clear!</button>
+				<div class="filter" data-ng-repeat = '(filterKey, filterValue) in defaultFilter'>  <!-- repeating all filters! -->
+					<div class="filterName" >
+						{{filterValue.name}}
+					</div>
+					<div class="filtercheck" data-ng-repeat = '(pointKey, pointValue) in filterValue.points'> <!--repeating points-->
+						<span class="{{filterValue.type}}" data-ng-if="filterValue.type == 'check'">
+<span data-ng-class="{'active' : (pointValue.isDefault && !usedFilter[filterKey]) || usedFilter[filterKey][pointKey]}" 					data-ng-click = 'clickFilter(filterKey, pointKey, usedFilter)'></span>
+						</span>
+
+						<span class="{{filterValue.type}}" data-ng-if="filterValue.type == 'radio'">
+<span data-ng-class="{'active' : pointValue.isDefault && !usedFilter[filterKey] || usedFilter[filterKey][pointKey]}" 
+	data-ng-click = 'clickFilter(filterKey, pointKey, usedFilter)'></span>
+						</span>
+						<span class="value">{{pointValue.title}}</span>
+					</div>
+				</div>
+				{{usedFilter}}
+			</div>
+			<div class="content col-md-9">
+				<div data-ng-repeat = 'item in items | itemFilter:usedFilter:defaultFilter' class = 'item'>
+					<p>color: <span data-ng-repeat = 'oneColor in item.colors'>{{defaultFilter.colors.points[oneColor].title}} </span></p>
+					<p>Age: <span data-ng-repeat = 'oneAge in item.age'>{{defaultFilter.age.points[oneAge].title}} </span></p>	
+					<p>brands: <span data-ng-repeat = 'oneBrand in item.brand'>{{defaultFilter.brand.points[oneBrand].title}} </span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+
